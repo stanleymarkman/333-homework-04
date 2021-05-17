@@ -10,6 +10,7 @@ import {
     Button,
     FlatList,
 } from 'react-native'
+import axios from "axios";
 
 class Rate extends React.Component {
     state = {
@@ -21,7 +22,17 @@ class Rate extends React.Component {
     }
 
     onSubmit = () => {
-        alert(this.state.username);
+        const formData = new FormData();
+        formData.append('username', this.state.username);
+        formData.append('username', this.state.username);
+        formData.append('songname', this.state.song);
+        formData.append('artistname', this.state.artist);
+        formData.append('rating', this.state.rating);
+
+        axios.post("http://musicr8r.herokuapp.com/rate/", formData)
+            .then(res => { alert("Rating Submitted!"); this.refreshCards() })
+            .catch(err => alert("Whoops! Try using an existing user, and make sure you filled out all fields!"));
+
     }
 
     componentDidMount() {
@@ -52,7 +63,6 @@ class Rate extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <FlatList data={this.state.cardData} renderItem={this.renderSongCard} keyExtractor={card => card.pk} />
                 <TextInput
                     style={styles.input}
                     placeholder="Username"
@@ -80,6 +90,8 @@ class Rate extends React.Component {
                     title="Submit"
                     color="#93A64F"
                 />
+                <FlatList data={this.state.cardData} renderItem={this.renderSongCard} keyExtractor={card => card.pk} />
+
                 <Text>end</Text>
             </SafeAreaView>
         )
@@ -100,17 +112,17 @@ const styles = StyleSheet.create({
         borderColor: '#93A64F',
         borderWidth: 1
     },
-    card:{
-        margin:5,
-        backgroundColor:'#37B49E',
-        padding:5,
-        borderRadius:5,
-        shadowRadius:1,
-        shadowOpacity:0.4,
+    card: {
+        margin: 5,
+        backgroundColor: '#37B49E',
+        padding: 5,
+        borderRadius: 5,
+        shadowRadius: 1,
+        shadowOpacity: 0.4,
 
-        shadowOffset:{
-            width:2,
-            height:2,
+        shadowOffset: {
+            width: 2,
+            height: 2,
         },
 
     },
